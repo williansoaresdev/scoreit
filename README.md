@@ -4,6 +4,8 @@ Jogo de basquete multiplayer online controlado por movimento. Os jogadores
 balançam o celular pra arremessar 10 lances livres e disputam a pontuação
 com todo mundo que estiver na mesma quadra, em tempo real.
 
+🔗 **Jogo publicado**: https://scoreit-wrcz.onrender.com/
+
 - **Frontend**: PWA em HTML/CSS/JS puros (`/public`) — sem framework, sem build.
 - **Backend**: Node.js + [`ws`](https://github.com/websockets/ws) (servidor WebSocket) em `/server`, servido junto com o frontend estático por uma única aplicação Express.
 - **Hospedagem**: pensado pro [Render](https://render.com) (`render.yaml` já incluso).
