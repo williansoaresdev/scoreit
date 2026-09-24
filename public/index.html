@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>ScoreIt</title>
+<meta name="description" content="ScoreIt - online multiplayer motion-controlled basketball" />
+<meta name="theme-color" content="#0f1b3d" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="icons/icon.svg" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<!-- 1) SPLASH -->
+<section class="screen screen-splash is-active" id="screen-splash">
+  <div class="splash-bg"></div>
+  <div class="splash-content">
+    <div class="splash-ball">🏀</div>
+    <h1 class="splash-title">ScoreIt</h1>
+    <p class="splash-tag">Shoot. Score. Compete.</p>
+    <button class="btn btn-primary btn-glow" id="btn-splash-continue" type="button">Tap to Play</button>
+  </div>
+</section>
+
+<!-- 2) CHARACTER SELECT -->
+<section class="screen screen-character" id="screen-character">
+  <header class="screen-header">
+    <h2>Choose Your Player</h2>
+  </header>
+  <div class="char-grid" id="char-grid">
+    <button class="char-card" data-character="boy_dark" type="button">
+      <span class="char-thumb" data-avatar="boy_dark"></span>
+      <span class="char-label">Player 1</span>
+    </button>
+    <button class="char-card" data-character="boy_blonde" type="button">
+      <span class="char-thumb" data-avatar="boy_blonde"></span>
+      <span class="char-label">Player 2</span>
+    </button>
+    <button class="char-card" data-character="girl_dark" type="button">
+      <span class="char-thumb" data-avatar="girl_dark"></span>
+      <span class="char-label">Player 3</span>
+    </button>
+    <button class="char-card" data-character="girl_blonde" type="button">
+      <span class="char-thumb" data-avatar="girl_blonde"></span>
+      <span class="char-label">Player 4</span>
+    </button>
+  </div>
+  <div class="field-group">
+    <label for="input-name">Your name</label>
+    <input id="input-name" type="text" maxlength="16" placeholder="Enter your name" autocomplete="off" />
+  </div>
+  <button class="btn btn-primary" id="btn-character-continue" type="button" disabled>Continue</button>
+</section>
+
+<!-- 2.1) ROOM SELECT -->
+<section class="screen screen-room" id="screen-room">
+  <header class="screen-header">
+    <h2>Join the Action</h2>
+  </header>
+  <div class="room-choice">
+    <button class="btn btn-primary btn-big" id="btn-create-court" type="button">Create a Court</button>
+    <div class="divider"><span>or</span></div>
+    <div class="field-group">
+      <label for="input-room-id">Enter Court ID</label>
+      <input id="input-room-id" type="text" maxlength="6" placeholder="e.g. 7F3KQP" autocomplete="off" autocapitalize="characters" />
+    </div>
+    <button class="btn btn-secondary btn-big" id="btn-join-court" type="button">Join Court</button>
+  </div>
+  <button class="btn btn-link" id="btn-room-back" type="button">← Back</button>
+</section>
+
+<!-- LOBBY (creator only) -->
+<section class="screen screen-lobby" id="screen-lobby">
+  <header class="screen-header">
+    <h2>Your Court is Ready</h2>
+  </header>
+  <div class="lobby-code-card">
+    <span class="lobby-code-label">Court ID</span>
+    <span class="lobby-code" id="lobby-room-id">------</span>
+    <button class="btn btn-secondary" id="btn-share-court" type="button">📤 Share</button>
+  </div>
+  <div class="lobby-players">
+    <h3>Players (<span id="lobby-player-count">0</span>/30)</h3>
+    <ul class="player-list" id="lobby-player-list"></ul>
+  </div>
+  <button class="btn btn-primary btn-big btn-glow" id="btn-enter-court" type="button">Enter Court</button>
+</section>
+
+<!-- 6) GAME / COURT -->
+<section class="screen screen-game" id="screen-game">
+  <div class="hud">
+    <div class="hud-pill">
+      <span class="hud-label">Shots</span>
+      <span class="hud-value"><span id="hud-shots-taken">0</span>/<span id="hud-shots-total">10</span></span>
+    </div>
+    <div class="hud-pill hud-score">
+      <span class="hud-label">Score</span>
+      <span class="hud-value" id="hud-score">0</span>
+    </div>
+  </div>
+
+  <button class="board-toggle" id="btn-board-toggle" type="button" aria-label="Show leaderboard">🏆</button>
+  <aside class="live-board" id="live-board">
+    <h4>Live Standings</h4>
+    <ol class="live-board-list" id="live-board-list"></ol>
+  </aside>
+
+  <div class="court-scene" id="court-scene">
+    <div class="court-sky"></div>
+    <div class="court-hedge"></div>
+    <div class="hoop" id="hoop">
+      <div class="hoop-pole"></div>
+      <div class="backboard"></div>
+      <div class="rim"></div>
+      <div class="net"></div>
+    </div>
+    <div class="ball" id="ball">🏀</div>
+    <div class="avatar-wrap" id="avatar-wrap"></div>
+    <div class="court-floor"></div>
+    <div class="shot-feedback" id="shot-feedback"></div>
+  </div>
+
+  <div class="motion-gate" id="motion-gate">
+    <div class="motion-gate-card">
+      <p>ScoreIt uses your phone's motion sensors.<br/>Swing your phone up to shoot!</p>
+      <button class="btn btn-primary btn-big" id="btn-enable-motion" type="button">Enable Motion Controls</button>
+      <button class="btn btn-link" id="btn-skip-motion" type="button">Use touch swipe instead</button>
+    </div>
+  </div>
+</section>
+
+<!-- 11) RESULTS -->
+<section class="screen screen-results" id="screen-results">
+  <header class="screen-header">
+    <h2>Final Results</h2>
+  </header>
+  <ol class="results-list" id="results-list"></ol>
+  <button class="btn btn-primary btn-big" id="btn-results-home" type="button">Back to Home</button>
+</section>
+
+<script src="js/avatar.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/motion.js"></script>
+<script src="js/network.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

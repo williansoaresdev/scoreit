@@ -1,0 +1,13 @@
+{
+  "name": "ScoreIt",
+  "short_name": "ScoreIt",
+  "description": "Online multiplayer motion-controlled basketball",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f1b3d",
+  "theme_color": "#0f1b3d",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
