@@ -50,13 +50,39 @@ const AVATAR_PRESETS = {
   },
 };
 
+function shade(hex, percent) {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const amt = Math.round(255 * (percent / 100));
+  let r = (num >> 16) + amt;
+  let g = ((num >> 8) & 0x00ff) + amt;
+  let b = (num & 0x0000ff) + amt;
+  r = Math.max(0, Math.min(255, r));
+  g = Math.max(0, Math.min(255, g));
+  b = Math.max(0, Math.min(255, b));
+  return `#${(0x1000000 + r * 0x10000 + g * 0x100 + b).toString(16).slice(1)}`;
+}
+
 function buildAvatarSVG(characterId) {
   const p = AVATAR_PRESETS[characterId] || AVATAR_PRESETS.boy_dark;
 
   const hair = p.hairStyle === 'pony'
-    ? `<path d="M96,150 C80,160 78,200 92,236 C98,250 112,254 120,248 C110,220 106,180 112,152 Z" fill="${p.hair}"/>
-       <rect x="100" y="140" width="26" height="14" rx="6" fill="${p.hair}"/>
-       <ellipse cx="120" cy="55" rx="40" ry="36" fill="${p.hair}"/>`
+    ? `<ellipse cx="120" cy="52" rx="40" ry="36" fill="${p.hair}"/>
+       <path d="M107,47
+                C113,60 119,68 116,80
+                C113,94 105,106 108,119
+                C111,133 121,145 118,158
+                C116,169 111,181 114,192
+                C116,201 119,208 121,215
+                C124,209 127,202 123,193
+                C120,182 127,170 132,159
+                C137,146 124,134 127,120
+                C130,106 141,95 138,81
+                C135,68 128,60 132,47
+                C126,42 113,42 107,47 Z"
+             fill="${p.hair}"/>
+       <path d="M116,56 C124,72 128,90 121,108 C116,124 124,140 118,156 C114,168 119,182 113,196"
+             fill="none" stroke="${shade(p.hair, 24)}" stroke-width="3.5" stroke-linecap="round" opacity="0.45"/>
+       <ellipse cx="120" cy="49" rx="10" ry="4" fill="${shade(p.hair, -6)}" opacity="0.55"/>`
     : `<ellipse cx="120" cy="52" rx="40" ry="35" fill="${p.hair}"/>
        <path d="M82,50 Q90,20 120,20 Q150,20 158,50 Q150,38 120,36 Q90,38 82,50 Z" fill="${p.hair}"/>`;
 
